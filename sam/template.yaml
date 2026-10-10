@@ -1,0 +1,24 @@
+AWSTemplateFormatVersion: "2010-09-09"
+Transform: AWS::Serverless-2016-10-31
+Description: GreenWard weather-aware tree-care guidance API, developed locally with AWS SAM and ready for AWS deployment.
+
+Resources:
+  WateringAdviceFunction:
+    Type: AWS::Serverless::Function
+    Properties:
+      CodeUri: src/
+      Handler: app.lambda_handler
+      Runtime: python3.12
+      MemorySize: 128
+      Timeout: 5
+      Events:
+        WateringAdvice:
+          Type: HttpApi
+          Properties:
+            Path: /watering-advice
+            Method: POST
+
+Outputs:
+  WateringAdviceEndpoint:
+    Description: POST route for local SAM or deployed API Gateway use
+    Value: /watering-advice

@@ -1,0 +1,25 @@
+{
+  "name": "greenward",
+  "version": "0.1.0",
+  "private": true,
+  "type": "module",
+  "workspaces": [
+    "apps/*"
+  ],
+  "scripts": {
+    "dev": "concurrently -k -n web,api -c green,blue \"npm run dev --workspace @greenward/web\" \"npm run dev --workspace @greenward/api\"",
+    "dev:aws": "concurrently -k -n web,api,sam -c green,blue,magenta \"npm run dev --workspace @greenward/web\" \"npm run dev --workspace @greenward/api\" \"npm run sam:local\"",
+    "sam:local": "sam local start-api --template-file sam/template.yaml --region ap-south-1 --port 8788 --warm-containers lazy",
+    "sam:validate": "sam validate --lint --template-file sam/template.yaml --region ap-south-1",
+    "sam:build": "sam build --template-file sam/template.yaml --region ap-south-1",
+    "build": "npm run build --workspace @greenward/web && npm run build --workspace @greenward/api",
+    "data:setup": "node apps/api/scripts/prepare-tree-data.mjs",
+    "data:refresh": "node apps/api/scripts/prepare-tree-data.mjs --force"
+  },
+  "devDependencies": {
+    "concurrently": "^9.2.1"
+  },
+  "engines": {
+    "node": ">=22.12.0"
+  }
+}
